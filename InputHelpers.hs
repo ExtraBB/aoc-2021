@@ -4,6 +4,4 @@ readLines :: FilePath -> IO [String]
 readLines = fmap lines . readFile
 
 readInts :: FilePath -> IO [Int]
-readInts path = do
-    lines <- readLines path
-    return (map read lines)
+readInts path = fmap read . lines <$> readFile path

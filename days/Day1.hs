@@ -1,12 +1,10 @@
 module Day1 (part1, part2) where
 
 part1 :: [Int] -> Int
-part1 xs@(x:y:_) = fromEnum (y > x) + part1 (tail xs)
-part1 _ = 0
+part1 = increases 1
 
 part2 :: [Int] -> Int
-part2 = part1 . windows
+part2 = increases 3
 
-windows :: [Int] -> [Int]
-windows xs@(x:y:z:_) = (x + y + z) : windows (tail xs)
-windows _ = []
+increases :: Int -> [Int] -> Int
+increases n xs = length $ filter id $ zipWith (<) xs (drop n xs)
