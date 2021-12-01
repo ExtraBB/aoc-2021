@@ -5,13 +5,16 @@ import qualified InputHelpers (readLines, readInts)
 main :: IO ()
 main = do
   nums <- InputHelpers.readInts "input/day1"
-  print (day1 nums)
-  print (day1part2 nums)
+  print (part1 nums)
+  print (part2 nums)
 
-day1 :: [Int] -> Int
-day1 (x:y:xs) = fromEnum (y > x) + day1 (y:xs)
-day1 _ = 0
+part1 :: [Int] -> Int
+part1 xs@(x:y:_) = fromEnum (y > x) + part1 (tail xs)
+part1 _ = 0
 
-day1part2 :: [Int] -> Int
-day1part2 xs@(w:x:y:z:_) = fromEnum ((x + y + z) > (w + x + y)) + day1part2 (tail xs)
-day1part2 _ = 0
+part2 :: [Int] -> Int
+part2 = part1 . windows
+
+windows :: [Int] -> [Int]
+windows xs@(x:y:z:_) = (x + y + z) : windows (tail xs)
+windows _ = []
