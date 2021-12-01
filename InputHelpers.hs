@@ -1,4 +1,4 @@
-module MyLib (readLines, readInts) where
+module InputHelpers (readLines, readInts) where
 
 readLines :: FilePath -> IO [String]
 readLines = fmap lines . readFile

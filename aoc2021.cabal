@@ -16,7 +16,7 @@ maintainer:          private
 extra-source-files:  CHANGELOG.md
 
 library
-  exposed-modules:     MyLib
+  exposed-modules:     InputHelpers
   -- other-modules:
   -- other-extensions:
   build-depends:       base ^>=4.14.1.0
@@ -25,7 +25,7 @@ library
 
 executable aoc2021
   main-is:             Main.hs
-  other-modules:       MyLib
+  other-modules:       InputHelpers
   -- other-extensions:
   build-depends:       base ^>=4.14.1.0, aoc2021
   -- hs-source-dirs:
