@@ -1,23 +1,41 @@
 module Day2(part1, part2) where
+import Control.Monad.State
 
-move :: [String] -> [Int] -> [Int]
-move ("forward" :x:_)  (pos:depth:_) = [pos + read x, depth]
-move ("up"      :x:_)  (pos:depth:_) = [pos, depth - read x]
-move ("down"    :x:_)  (pos:depth:_) = [pos, depth + read x]
-move _ x                             = x
+data Direction = Forward Int | Down Int | Up Int
+
+parseDirection :: String -> Direction
+parseDirection input = case words input of
+     ("forward" :x:_) -> Forward (read x)
+     ("up"      :x:_) -> Up (read x)
+     ("down"    :x:_) -> Down (read x)
+     _ -> Forward 0
+
+move :: [Direction] -> State (Int, Int) Int
+move [] = do
+    (pos, depth) <- get
+    return (pos * depth)
+move (x:xs) = do
+    (pos, depth) <- get
+    case x of
+        Forward n   -> put (pos + n, depth)
+        Up n        -> put (pos, depth - n)
+        Down n      -> put (pos, depth + n)
+    move xs
 
 part1 :: [String] -> Int
-part1 lines = solution $ foldr (move . words) [0,0] lines
+part1 lines = (evalState . move) (map parseDirection lines) (0,0)
 
-move2 :: [String] -> [Int] -> [Int]
-move2 ("forward" :x:_)  (pos:depth:aim:_) = [pos + read x, depth + (aim * read x), aim]
-move2 ("up"      :x:_)  (pos:depth:aim:_) = [pos, depth, aim - read x]
-move2 ("down"    :x:_)  (pos:depth:aim:_) = [pos, depth, aim + read x]
-move2 _                  x                = x
+move2 :: [Direction] -> State (Int, Int, Int) Int
+move2 [] = do
+    (pos, depth, aim) <- get
+    return (pos * depth)
+move2 (x:xs) = do
+    (pos, depth, aim) <- get
+    case x of
+        Forward n   -> put (pos + n, depth + aim * n, aim)
+        Up n        -> put (pos, depth, aim - n)
+        Down n      -> put (pos, depth, aim + n)
+    move2 xs
 
 part2 :: [String] -> Int 
-part2 lines = solution $ foldr (move2 . words) [0,0,0] (reverse lines)
-
-solution :: [Int] -> Int
-solution (x:y:xs) = x * y
-solution _ = 0
+part2 lines = (evalState . move2) (map parseDirection lines) (0,0,0)
