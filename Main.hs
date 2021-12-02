@@ -2,9 +2,10 @@ module Main where
 
 import qualified InputHelpers (readLines, readInts)
 import qualified Day1 (part1, part2)
+import qualified Day2 (part1, part2)
 
 main :: IO ()
-main = day 1
+main = day 2
 
 day :: Int -> IO ()
 day n = do
@@ -17,4 +18,5 @@ day n = do
 runDay :: [String] -> Int -> (String, String)
 runDay lines n = case n of
   1 -> (show $ Day1.part1 nums, show $ Day1.part2 nums) where nums = map read lines
+  2 -> (show $ Day2.part1 lines, show $ Day2.part2 lines)
   _ -> ("None", "None")
